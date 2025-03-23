@@ -1,0 +1,18 @@
+[project]
+name = "mcp-agg"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi==0.109.2",
+    "passlib[bcrypt]==1.7.4",
+    "psycopg2-binary==2.9.9",
+    "pydantic==2.6.1",
+    "python-dotenv==1.0.1",
+    "python-jose[cryptography]==3.3.0",
+    "python-multipart==0.0.9",
+    "requests==2.31.0",
+    "sqlalchemy==2.0.27",
+    "uvicorn==0.27.1",
+]
