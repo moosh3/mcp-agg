@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from api.routers import auth, tools, health
+from api.routers import auth, tools, health, apps
 from api.database import engine, Base
 from api.dependencies import get_current_active_user
 from api.apps.github.routes import router as github_router
@@ -45,6 +45,13 @@ app.include_router(
     health.router,
     prefix="/api/v1",
     tags=["health"]
+)
+
+# Include Apps router
+app.include_router(
+    apps.router,
+    prefix="/api/v1",
+    tags=["apps"]
 )
 
 # Include GitHub router

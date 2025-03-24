@@ -447,3 +447,106 @@ This refactoring follows the same pattern applied to the Slack tool handler, ens
    - Ensured consistent error handling with the rest of the application
 
 This implementation allows users to generate a unique URL for their MCP client that includes authentication information, enabling seamless access to all tools they have credentials for without additional authentication steps.
+
+## 2025-03-23 18:49:15 -0500
+
+### Created Comprehensive Project README
+
+1. Added Detailed Project Description:
+   - Included clear explanation of MCP-Agg's purpose and capabilities
+   - Highlighted key features with emoji-enhanced section headers for readability
+   - Listed supported platforms (GitHub, Slack) with their available tools
+
+2. Provided Complete Setup Instructions:
+   - Detailed installation steps using uv package manager
+   - Added environment configuration guidance
+   - Included database migration instructions
+   - Documented multiple ways to run the application (development, production, Docker)
+
+3. Enhanced User Experience:
+   - Added badges for Python, FastAPI, and license information
+   - Included documentation links and MCP client usage instructions
+   - Added testing instructions and contribution guidelines
+   - Provided contact information and licensing details
+
+The README now serves as a comprehensive guide for new users and contributors, making it easy to understand the project's purpose, set up a development environment, and start using the MCP-Agg service.
+
+## 2025-03-24 08:15:43 -0500
+
+### Generated OpenAPI Specification for MCP-Agg API
+
+1. Created a robust script to generate OpenAPI documentation:
+   - Implemented `generate_openapi_spec_no_db.py` with SQLAlchemy connection mocking to avoid database dependencies
+   - Generated a complete OpenAPI JSON specification at `openapi.json` in the project root
+   - Documented all available API endpoints, schemas, and security requirements
+
+2. Technical Details of Implementation:
+   - Used monkeypatching to bypass SQLAlchemy database connections
+   - Created a clean FastAPI app instance to generate the schema
+   - Ensured all routers (auth, tools, health, GitHub, Slack) were included
+   - Preserved all tags, dependencies, and path prefixes
+
+The generated OpenAPI specification provides a complete reference of all API endpoints, request/response schemas, and authentication requirements, which can be used for client generation, documentation, and API testing.
+
+## 2025-03-24 08:22:56 -0500
+
+### Added Docker Configuration for Full-Stack Deployment
+
+1. Created Docker infrastructure for the project:
+   - Implemented Dockerfile for API backend using Python 3.12 and uv package manager
+   - Added Dockerfile for React TypeScript frontend with multi-stage build for optimized production deployment
+   - Created Nginx configuration for frontend with API proxying to backend service
+   - Configured docker-compose.yml with proper volumes, networking, and environment variables
+
+2. Set up local development environment:
+   - Created React TypeScript frontend using Vite
+   - Generated TypeScript API client from OpenAPI specification
+   - Configured proper volume mounts for hot-reloading in development
+
+3. Ensured proper data persistence and security:
+   - Added PostgreSQL database container with persistent volume
+   - Set up proper volume permissions and read-only mounts where appropriate
+   - Avoided hardcoding sensitive information by using environment variables
+
+The Docker setup now provides a complete environment for both development and production deployment of the full-stack application with proper separation between frontend and backend components.
+
+## 2025-03-24 09:00:11 -0500
+
+### Implemented API Endpoints for Apps Management
+
+1. Backend API Implementation:
+   - Created new CRUD module in `api/apps/crud.py` for managing apps
+   - Implemented functions for getting available apps, user-specific apps, creating, updating, and deleting apps
+   - Added new router in `api/routers/apps.py` with endpoints for:
+     - `GET /api/v1/apps` - List all available apps for registration
+     - `GET /api/v1/user/apps` - List all apps registered by the authenticated user
+     - `POST /api/v1/user/apps` - Register a new app for the authenticated user
+     - `GET /api/v1/user/apps/{app_id}` - Get details of a specific app registered by the user
+     - `DELETE /api/v1/user/apps/{app_id}` - Delete an app registration
+     - `GET /api/v1/dashboard/stats` - Get dashboard statistics for the authenticated user
+
+2. Frontend Implementation:
+   - Updated Dashboard component to use the real `/api/v1/dashboard/stats` endpoint instead of mock data
+   - Created new Apps component to display available apps and user's configured apps
+   - Added routing for the new Apps page
+   - Implemented UI for app configuration and deletion
+
+Next Steps:
+- Implement detailed app configuration screens for each app type
+- Add authentication methods specific to each app type (OAuth, API keys, etc.)
+- Enhance error handling and validation for app registration
+
+## 2025-03-24 09:03:15 -0500
+
+### Fixed MCP URL Page
+
+1. Backend API fixes:
+   - Corrected the SlackCredential model import in `api/routers/tools.py`
+   - Fixed the model reference to use the proper class name
+
+2. Frontend implementation:
+   - Updated the MCPUrl component to use the correct API endpoint path (`/api/v1/mcp-url/`)
+   - Removed mock data and properly used the response from the API
+   - Fixed error handling for token regeneration
+
+Now users can properly view and generate their MCP URL for connecting external clients to the system.

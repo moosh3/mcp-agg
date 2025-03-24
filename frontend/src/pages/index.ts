@@ -1,0 +1,9 @@
+// Barrel file to export all page components
+export { default as Login } from './Login';
+export { default as Register } from './Register';
+export { default as Dashboard } from './Dashboard';
+export { default as MCPUrl } from './MCPUrl';
+export { default as AppsList } from './AppsList';
+export { default as AppConfig } from './AppConfig';
+export { default as ToolsList } from './ToolsList';
+export { default as Apps } from './Apps';

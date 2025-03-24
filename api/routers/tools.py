@@ -6,7 +6,7 @@ from api.dependencies import get_current_active_user
 from api.apps.github.tools import GITHUB_TOOLS, create_github_handler
 from api.apps.slack.tools import SLACK_TOOLS, create_slack_handler
 from api.apps.github.models import GitHubCredential
-from api.apps.slack.models import SlackCredential
+from api.models import SlackCredentials as SlackCredential
 import secrets
 from datetime import datetime, timedelta
 import os

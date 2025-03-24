@@ -1,0 +1,2042 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MCP Aggregator",
+    "description": "A centralized location for LLM applications to access external context, tools, and prompts",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/register": {
+      "post": {
+        "tags": [
+          "authentication",
+          "authentication"
+        ],
+        "summary": "Register User",
+        "description": "Register a new user.",
+        "operationId": "register_user_api_v1_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/token": {
+      "post": {
+        "tags": [
+          "authentication",
+          "authentication"
+        ],
+        "summary": "Login",
+        "description": "Login to get access token.",
+        "operationId": "login_api_v1_token_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_api_v1_token_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": [
+          "authentication",
+          "authentication"
+        ],
+        "summary": "Read Users Me",
+        "description": "Get current user information.",
+        "operationId": "read_users_me_api_v1_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/check": {
+      "get": {
+        "tags": [
+          "authentication",
+          "authentication"
+        ],
+        "summary": "Check Auth",
+        "description": "Check if user is authenticated.",
+        "operationId": "check_auth_api_v1_check_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/accounts": {
+      "get": {
+        "tags": [
+          "authentication",
+          "authentication"
+        ],
+        "summary": "List Accounts",
+        "description": "List all user accounts (admin only).",
+        "operationId": "list_accounts_api_v1_accounts_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/{user_id}": {
+      "patch": {
+        "tags": [
+          "authentication",
+          "authentication"
+        ],
+        "summary": "Update User Status",
+        "description": "Update user status (admin only).",
+        "operationId": "update_user_status_api_v1_users__user_id__patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Is Active"
+            }
+          },
+          {
+            "name": "is_admin",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Is Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "authentication",
+          "authentication"
+        ],
+        "summary": "Delete User",
+        "description": "Delete a user (admin only).",
+        "operationId": "delete_user_api_v1_users__user_id__delete",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/apps/{app}/tools/": {
+      "get": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "List App Tools",
+        "description": "List all tools available for a specific app\n\nArgs:\n    app (str): App name (e.g., 'github')\n    db (Session): Database session\n    \nReturns:\n    List[schemas.Tool]: List of tools for the app",
+        "operationId": "list_app_tools_api_v1_apps__app__tools__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "App"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tool"
+                  },
+                  "title": "Response List App Tools Api V1 Apps  App  Tools  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/apps/{app}/tools/{tool}/": {
+      "get": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "Get Tool",
+        "description": "Get a specific tool by app and tool name\n\nArgs:\n    app (str): App name (e.g., 'github')\n    tool (str): Tool name (e.g., 'github.list_repos')\n    db (Session): Database session\n    \nReturns:\n    schemas.Tool: Tool details\n    \nRaises:\n    HTTPException: If tool is not found",
+        "operationId": "get_tool_api_v1_apps__app__tools__tool___get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "app",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "App"
+            }
+          },
+          {
+            "name": "tool",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tool"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tool"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/guess-tools/": {
+      "get": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "Guess Tools",
+        "operationId": "guess_tools_api_v1_guess_tools__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "description",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Description"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/execute/": {
+      "post": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "Execute Tool",
+        "description": "Execute a tool with provided parameters\n\nArgs:\n    request (schemas.ExecuteToolRequest): Tool execution request\n    db (Session): Database session\n    current_user (models.User): Current authenticated user\n    \nReturns:\n    schemas.ExecuteToolResponse: Execution result\n    \nRaises:\n    HTTPException: If tool is not found or execution fails",
+        "operationId": "execute_tool_api_v1_execute__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteToolRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecuteToolResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/tools/{tool_id}/execute/": {
+      "post": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "Execute Specific Tool",
+        "description": "Execute a tool by its ID\n\nArgs:\n    tool_id (int): Tool ID in the database\n    db (Session): Database session\n    current_user (models.User): Current authenticated user\n    \nReturns:\n    schemas.ExecuteToolResponse: Execution result",
+        "operationId": "execute_specific_tool_api_v1_tools__tool_id__execute__post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "tool_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Tool Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecuteToolResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/execute/log/{execution_log_id}/rate/": {
+      "post": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "Rate Execution",
+        "operationId": "rate_execution_api_v1_execute_log__execution_log_id__rate__post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "execution_log_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Execution Log Id"
+            }
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Rating"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tools/": {
+      "get": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "List Tools",
+        "operationId": "list_tools_api_v1_tools__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Tool"
+                  },
+                  "type": "array",
+                  "title": "Response List Tools Api V1 Tools  Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/mcp-url/": {
+      "get": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "Generate Mcp Url",
+        "description": "Generate a unique URL for the user to connect their MCP client\n\nThis URL contains authentication information that allows the MCP client\nto access all tools available to the user without additional authentication.\n\nArgs:\n    db (Session): Database session\n    current_user (models.User): Current authenticated user\n    \nReturns:\n    schemas.MCPUrlResponse: MCP URL and associated metadata",
+        "operationId": "generate_mcp_url_api_v1_mcp_url__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MCPUrlResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/tools/{tool_id}/": {
+      "get": {
+        "tags": [
+          "tools",
+          "tools"
+        ],
+        "summary": "Get Tool By Id",
+        "operationId": "get_tool_by_id_api_v1_tools__tool_id___get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "tool_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Tool Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tool"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/api/v1/health/liveness": {
+      "get": {
+        "tags": [
+          "health",
+          "health"
+        ],
+        "summary": "Liveness",
+        "operationId": "liveness_api_v1_api_v1_health_liveness_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/api/v1/health/readiness": {
+      "get": {
+        "tags": [
+          "health",
+          "health"
+        ],
+        "summary": "Readiness",
+        "operationId": "readiness_api_v1_api_v1_health_readiness_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/api/v1/health/metrics": {
+      "get": {
+        "tags": [
+          "health",
+          "health"
+        ],
+        "summary": "Metrics",
+        "operationId": "metrics_api_v1_api_v1_health_metrics_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/apps/github/connect": {
+      "post": {
+        "tags": [
+          "github"
+        ],
+        "summary": "Connect Github",
+        "description": "Connect GitHub account by providing an OAuth access token.\n\nArgs:\n    credentials (GitHubCredentialCreate): GitHub credentials\n    db (Session): Database session\n    current_user (User): Current authenticated user\n    \nReturns:\n    GitHubCredentialSchema: Saved GitHub credentials",
+        "operationId": "connect_github_api_v1_apps_github_connect_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GitHubCredentialCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GitHubCredential"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/github/repositories": {
+      "get": {
+        "tags": [
+          "github"
+        ],
+        "summary": "List Repositories",
+        "description": "List repositories for the authenticated GitHub user.\n\nArgs:\n    github_client (GitHubClient): Authenticated GitHub client\n    \nReturns:\n    Dict[str, Any]: List of repositories",
+        "operationId": "list_repositories_api_v1_apps_github_repositories_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/github/user": {
+      "get": {
+        "tags": [
+          "github"
+        ],
+        "summary": "Get User",
+        "description": "Get authenticated GitHub user information.\n\nArgs:\n    github_client (GitHubClient): Authenticated GitHub client\n    \nReturns:\n    Dict[str, Any]: User information",
+        "operationId": "get_user_api_v1_apps_github_user_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/github/repositories/{owner}/{repo}/issues": {
+      "get": {
+        "tags": [
+          "github"
+        ],
+        "summary": "List Issues",
+        "description": "List issues for a GitHub repository.\n\nArgs:\n    owner (str): Repository owner\n    repo (str): Repository name\n    github_client (GitHubClient): Authenticated GitHub client\n    \nReturns:\n    Dict[str, Any]: List of issues",
+        "operationId": "list_issues_api_v1_apps_github_repositories__owner___repo__issues_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Owner"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Repo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "github"
+        ],
+        "summary": "Create Issue",
+        "description": "Create a new issue in a GitHub repository.\n\nArgs:\n    owner (str): Repository owner\n    repo (str): Repository name\n    title (str): Issue title\n    body (str, optional): Issue body. Defaults to None.\n    github_client (GitHubClient): Authenticated GitHub client\n    \nReturns:\n    Dict[str, Any]: Created issue information",
+        "operationId": "create_issue_api_v1_apps_github_repositories__owner___repo__issues_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "owner",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Owner"
+            }
+          },
+          {
+            "name": "repo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Repo"
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Title"
+            }
+          },
+          {
+            "name": "body",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "Body"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/apps/slack/connect": {
+      "post": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "Connect Slack",
+        "description": "Connect Slack account by providing an OAuth access token.\n\nArgs:\n    credentials (SlackCredentialCreate): Slack credentials\n    db (Session): Database session\n    current_user (User): Current authenticated user\n    \nReturns:\n    SlackCredentialSchema: Saved Slack credentials",
+        "operationId": "connect_slack_api_v1_apps_slack_connect_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SlackCredentialCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlackCredential"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/slack/channels": {
+      "get": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "List Channels",
+        "description": "List channels for the authenticated Slack workspace.\n\nArgs:\n    slack_client (SlackClient): Authenticated Slack client\n    \nReturns:\n    Dict[str, Any]: List of channels",
+        "operationId": "list_channels_api_v1_apps_slack_channels_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/slack/channels/{channel_id}/messages": {
+      "post": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "Post Message",
+        "description": "Post a message to a channel.\n\nArgs:\n    channel_id (str): Channel ID\n    text (str): Message text\n    slack_client (SlackClient): Authenticated Slack client\n    \nReturns:\n    Dict[str, Any]: Message posting result",
+        "operationId": "post_message_api_v1_apps_slack_channels__channel_id__messages_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Channel Id"
+            }
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Text"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/apps/slack/channels/{channel_id}/threads/{thread_ts}/replies": {
+      "post": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "Reply To Thread",
+        "description": "Reply to a message thread.\n\nArgs:\n    channel_id (str): Channel ID\n    thread_ts (str): Thread timestamp\n    text (str): Reply text\n    slack_client (SlackClient): Authenticated Slack client\n    \nReturns:\n    Dict[str, Any]: Reply result",
+        "operationId": "reply_to_thread_api_v1_apps_slack_channels__channel_id__threads__thread_ts__replies_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Channel Id"
+            }
+          },
+          {
+            "name": "thread_ts",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Thread Ts"
+            }
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Text"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "Get Thread Replies",
+        "description": "Get replies in a thread.\n\nArgs:\n    channel_id (str): Channel ID\n    thread_ts (str): Thread timestamp\n    slack_client (SlackClient): Authenticated Slack client\n    \nReturns:\n    Dict[str, Any]: Thread replies",
+        "operationId": "get_thread_replies_api_v1_apps_slack_channels__channel_id__threads__thread_ts__replies_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Channel Id"
+            }
+          },
+          {
+            "name": "thread_ts",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Thread Ts"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/apps/slack/channels/{channel_id}/history": {
+      "get": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "Get Channel History",
+        "description": "Get channel message history.\n\nArgs:\n    channel_id (str): Channel ID\n    limit (int, optional): Number of messages. Defaults to 10.\n    slack_client (SlackClient): Authenticated Slack client\n    \nReturns:\n    Dict[str, Any]: Channel history",
+        "operationId": "get_channel_history_api_v1_apps_slack_channels__channel_id__history_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "channel_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Channel Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/apps/slack/users": {
+      "get": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "List Users",
+        "description": "List users in the Slack workspace.\n\nArgs:\n    slack_client (SlackClient): Authenticated Slack client\n    \nReturns:\n    Dict[str, Any]: List of users",
+        "operationId": "list_users_api_v1_apps_slack_users_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/slack/users/{user_id}": {
+      "get": {
+        "tags": [
+          "slack"
+        ],
+        "summary": "Get User Profile",
+        "description": "Get user profile.\n\nArgs:\n    user_id (str): User ID\n    slack_client (SlackClient): Authenticated Slack client\n    \nReturns:\n    Dict[str, Any]: User profile",
+        "operationId": "get_user_profile_api_v1_apps_slack_users__user_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "App": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "owner_id": {
+            "type": "integer",
+            "title": "Owner Id"
+          },
+          "tools": {
+            "items": {
+              "$ref": "#/components/schemas/Tool"
+            },
+            "type": "array",
+            "title": "Tools",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "id",
+          "owner_id"
+        ],
+        "title": "App"
+      },
+      "Body_login_api_v1_token_post": {
+        "properties": {
+          "grant_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "password"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "scope": {
+            "type": "string",
+            "title": "Scope",
+            "default": ""
+          },
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_api_v1_token_post"
+      },
+      "ExecuteToolRequest": {
+        "properties": {
+          "tool": {
+            "type": "string",
+            "title": "Tool"
+          },
+          "parameters": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parameters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tool"
+        ],
+        "title": "ExecuteToolRequest"
+      },
+      "ExecuteToolResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "title": "ExecuteToolResponse"
+      },
+      "GitHubCredential": {
+        "properties": {
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "scope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "access_token",
+          "created_at"
+        ],
+        "title": "GitHubCredential",
+        "description": "Schema for GitHub credential responses"
+      },
+      "GitHubCredentialCreate": {
+        "properties": {
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "scope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope"
+          },
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token"
+        ],
+        "title": "GitHubCredentialCreate",
+        "description": "Schema for creating GitHub credentials"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "MCPUrlResponse": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": "URL for connecting to the MCP server with your credentials"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "MCPUrlResponse"
+      },
+      "SlackCredential": {
+        "properties": {
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "scope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope"
+          },
+          "team_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Id"
+          },
+          "team_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Name"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "access_token",
+          "created_at"
+        ],
+        "title": "SlackCredential",
+        "description": "Schema for Slack credential responses"
+      },
+      "SlackCredentialCreate": {
+        "properties": {
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          },
+          "scope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope"
+          },
+          "team_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Id"
+          },
+          "team_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Team Name"
+          },
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token"
+        ],
+        "title": "SlackCredentialCreate",
+        "description": "Schema for creating Slack credentials"
+      },
+      "Tool": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "parameters": {
+            "type": "object",
+            "title": "Parameters"
+          },
+          "action_definition": {
+            "type": "object",
+            "title": "Action Definition"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "app_id": {
+            "type": "integer",
+            "title": "App Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "parameters",
+          "action_definition",
+          "id",
+          "app_id"
+        ],
+        "title": "Tool"
+      },
+      "User": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "is_admin": {
+            "type": "boolean",
+            "title": "Is Admin"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          },
+          "apps": {
+            "items": {
+              "$ref": "#/components/schemas/App"
+            },
+            "type": "array",
+            "title": "Apps",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "id",
+          "is_active",
+          "is_admin",
+          "created_at"
+        ],
+        "title": "User"
+      },
+      "UserCreate": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "UserCreate"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "/api/v1/auth/token"
+          }
+        }
+      }
+    }
+  }
+}
